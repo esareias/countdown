@@ -6,6 +6,7 @@
     <title>EXIT_PROTOCOL</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
         :root {
             --neon-cyan: #00f3ff;
             --neon-pink: #bc13fe;
@@ -13,6 +14,7 @@
             --bg-dark: #050505;
             --grid-color: rgba(0, 243, 255, 0.15);
         }
+        
         body {
             background-color: var(--bg-dark);
             color: var(--neon-cyan);
@@ -28,7 +30,43 @@
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
             background-size: 5vmin 5vmin;
+            position: relative;
         }
+
+        /* --- CRT VIGNETTE --- */
+        .crt-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            box-shadow: inset 0 0 15vmin rgba(0,0,0,0.95);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        /* --- DATA STREAM EFFECTS --- */
+        .spark { position: absolute; z-index: 1; border-radius: 50%; opacity: 0.8; }
+        .spark.cyan { background: var(--neon-cyan); box-shadow: 0 0 1vmin var(--neon-cyan), 0 0 3vmin var(--neon-cyan); }
+        .spark.pink { background: var(--neon-pink); box-shadow: 0 0 1vmin var(--neon-pink), 0 0 3vmin var(--neon-pink); }
+        .spark.h { height: 3px; width: 15vw; animation: shoot-h linear infinite; }
+        .spark.v { width: 3px; height: 15vh; animation: shoot-v linear infinite; }
+        
+        @keyframes shoot-h { 0% { transform: translateX(-20vw); } 100% { transform: translateX(120vw); } }
+        @keyframes shoot-v { 0% { transform: translateY(-20vh); } 100% { transform: translateY(120vh); } }
+
+        /* --- GLITCH & PULSE ANIMATIONS --- */
+        @keyframes text-glitch {
+            0%, 96%, 98%, 100% { text-shadow: 0.5vmin 0 var(--neon-pink), -0.5vmin 0 var(--neon-cyan); transform: translate(0); }
+            97% { text-shadow: -1vmin 0 red, 1vmin 0 blue; transform: translate(-0.5vmin, 0.5vmin); }
+            99% { text-shadow: 1vmin 0 white, -1vmin 0 var(--neon-pink); transform: translate(0.5vmin, -0.5vmin); }
+        }
+
+        @keyframes box-breathe {
+            0%, 100% { box-shadow: 0 0 1vmin var(--neon-pink); }
+            50% { box-shadow: 0 0 3vmin var(--neon-pink), inset 0 0 1vmin rgba(188, 19, 254, 0.3); }
+        }
+
+        /* --- MAIN UI --- */
+        .logo-container, .countdown-container { z-index: 10; position: relative; }
+
         .logo-container {
             text-align: center;
             margin-bottom: 3vmin;
@@ -38,64 +76,67 @@
             clip-path: polygon(5% 0, 100% 0, 100% 70%, 95% 100%, 0 100%, 0 30%);
             box-shadow: 0 0 2vmin var(--neon-cyan);
         }
+
         h1 { 
             font-size: 6vmin; 
             margin: 0; 
             letter-spacing: 1vmin; 
             color: #fff; 
-            text-shadow: 0.5vmin 0 var(--neon-pink), -0.5vmin 0 var(--neon-cyan); 
+            animation: text-glitch 4s infinite;
         }
-        .sub-text { 
-            display: block; 
-            font-size: 1.5vmin; 
-            color: var(--neon-yellow); 
-            margin-top: 1vmin; 
-        }
+
+        .sub-text { display: block; font-size: 1.5vmin; color: var(--neon-yellow); margin-top: 1vmin; }
+
         .countdown-container { 
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2vmin; 
-            width: 90vw;
-            max-width: 800px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 2vmin; 
+            width: 90vw; max-width: 800px;
         }
+
         .time-box {
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             padding: 2vmin;
             border: 0.3vmin solid var(--neon-pink);
-            box-shadow: 0 0 2vmin var(--neon-pink);
+            animation: box-breathe 4s infinite ease-in-out;
             text-align: center;
+            border-radius: 0.5vmin;
         }
-        .number { 
-            font-size: 8vmin; 
-            font-weight: bold; 
-            color: #fff; 
-            text-shadow: 0 0 2vmin var(--neon-pink); 
-        }
-        .label { 
-            font-size: 1.2vmin; 
-            color: var(--neon-cyan); 
-            letter-spacing: 0.3vmin; 
-            margin-top: 1vmin; 
-        }
+
+        .time-box:nth-child(2) { animation-delay: 0.5s; }
+        .time-box:nth-child(3) { animation-delay: 1s; }
+        .time-box:nth-child(4) { animation-delay: 1.5s; }
+
+        .number { font-size: 8vmin; font-weight: bold; color: #fff; text-shadow: 0 0 1.5vmin var(--neon-pink); }
+        .label { font-size: 1.2vmin; color: var(--neon-cyan); letter-spacing: 0.3vmin; margin-top: 1vmin; }
     </style>
 </head>
 <body>
+    <div class="crt-overlay"></div>
+
+    <div class="spark cyan h" style="top: 15%; left: 0; animation-duration: 4s; animation-delay: 0s;"></div>
+    <div class="spark pink h" style="top: 80%; left: 0; animation-duration: 3s; animation-delay: 1.5s;"></div>
+    <div class="spark cyan v" style="left: 20%; top: 0; animation-duration: 5s; animation-delay: 0.5s;"></div>
+    <div class="spark pink v" style="left: 85%; top: 0; animation-duration: 4.5s; animation-delay: 2s;"></div>
+    <div class="spark cyan h" style="top: 45%; left: 0; animation-duration: 6s; animation-delay: 3s;"></div>
+
     <div class="logo-container">
         <h1>EXIT_PROTOCOL</h1>
         <span class="sub-text">ACTUAL SCHOOL TIME REMAINING</span>
     </div>
+    
     <div class="countdown-container">
         <div class="time-box"><span class="number" id="d">00</span><div class="label">DAYS</div></div>
         <div class="time-box"><span class="number" id="h">00</span><div class="label">HOURS</div></div>
         <div class="time-box"><span class="number" id="m">00</span><div class="label">MINS</div></div>
         <div class="time-box"><span class="number" id="s">00</span><div class="label">SECS</div></div>
     </div>
+    
     <script>
         const target = new Date("2026-05-29T14:00:00");
         const holidays = ["2026-04-03", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-05-25"];
+        
         function update() {
             let totalMs = 0; let curr = new Date();
-            if (curr >= target) { document.body.innerHTML = "<h1>FREEDOM</h1>"; return; }
+            if (curr >= target) { document.body.innerHTML = "<h1 style='font-size: 10vmin; color: red; text-shadow: 0 0 3vmin red;'>FREEDOM</h1>"; return; }
             while (curr < target) {
                 let eod = new Date(curr); eod.setHours(23,59,59,999);
                 let seg = (eod > target) ? target : eod;
