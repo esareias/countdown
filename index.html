@@ -111,21 +111,23 @@
         /* --- DATA TICKER --- */
         .ticker-wrap {
             margin-top: 4vmin;
-            width: 80vw;
-            max-width: 900px;
+            width: 90vw; /* Made it a bit wider to hold the bigger text */
+            max-width: 1200px;
             border-top: 0.2vmin dashed var(--neon-cyan);
             border-bottom: 0.2vmin dashed var(--neon-cyan);
-            padding: 1.5vmin;
+            padding: 2vmin; /* Added more breathing room */
             text-align: center;
             background: rgba(0, 243, 255, 0.05);
-            min-height: 2vmin;
+            min-height: 4vmin;
         }
         
         .ticker-text {
             font-family: monospace;
-            font-size: 1.8vmin;
+            font-size: 3vmin; /* Almost double the original size */
+            font-weight: bold; /* Makes it thicker and easier to read from afar */
             color: var(--neon-yellow);
             letter-spacing: 0.2vmin;
+            text-shadow: 0 0 1vmin rgba(255, 238, 0, 0.5); /* Added a subtle yellow glow */
             transition: opacity 0.3s ease;
         }
     </style>
